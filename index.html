@@ -172,6 +172,16 @@
         .gallery-item a:hover {
             text-decoration: underline;
         }
+            /* Tab Styles */
+            .tab-pane {
+                display: none;
+                opacity: 0;
+                transition: opacity 0.3s ease-in-out;
+            }
+            .tab-pane.active {
+                display: block;
+                opacity: 1;
+            }
     </style>
 </head>
 <body>
@@ -239,7 +249,7 @@
                     </table>
                 </div>
 
-                <div id="tab-news" class="tab-pane" role="tabpanel" hidden>
+                         <div id="tab-news" class="tab-pane" role="tabpanel">
                     <h2>Aktuelle Projekte & News</h2>
                     <p>Hier finden Sie aktuelle Updates zu meinen Studien- und Berufsprojekten.</p>
                     <div id="news-list">
@@ -269,7 +279,7 @@
                     </div>
                 </div>
 
-                <div id="tab-projects" class="tab-pane" role="tabpanel" hidden>
+                         <div id="tab-projects" class="tab-pane" role="tabpanel">
                     <h2>Meine Projekte</h2>
                     <div class="gallery" style="display: flex; flex-wrap: wrap; gap: 1rem;">
                         <div class="gallery-item" style="flex: 1 1 calc(33.333% - 1rem);">
@@ -353,8 +363,8 @@
         const buttons = Array.from(document.querySelectorAll('.tab-btn'));
         const panes = document.querySelectorAll('.tab-pane');
         const indicator = document.getElementById('tab-indicator');
-        
-        function moveIndicator(tabIdx) {
+
+            function moveIndicator(tabIdx) {
             if (!indicator || !buttons[tabIdx]) return;
             const btn = buttons[tabIdx];
             const rect = btn.getBoundingClientRect();
@@ -362,8 +372,8 @@
             indicator.style.width = rect.width + 'px';
             indicator.style.left = (rect.left - parentRect.left) + 'px';
         }
-        
-        function activate(tab) {
+
+            function activate(tab) {
             let idx = 0;
             buttons.forEach((b,i)=>{
                 const is = b.dataset.tab === tab;
@@ -371,22 +381,40 @@
                 b.classList.toggle('active', is);
                 if(is) idx = i;
             });
-            panes.forEach(p=> p.hidden = p.id !== ('tab-'+tab));
+                panes.forEach(p => {
+                    if (p.id === 'tab-' + tab) {
+                        p.style.display = 'block';
+                        setTimeout(() => p.classList.add('active'), 50);
+                    } else {
+                        p.classList.remove('active');
+                        p.style.display = 'none';
+                    }
+                });
             localStorage.setItem('uebung2-active-tab', tab);
             moveIndicator(idx);
         }
-        
+
         buttons.forEach((b,i)=> b.addEventListener('click', ()=> activate(b.dataset.tab)));
-        
+
         // init: try saved tab
         const saved = localStorage.getItem('uebung2-active-tab') || 'about';
         activate(saved);
-        
+
         // On resize, keep indicator in sync
         window.addEventListener('resize', ()=>{
             const tab = buttons.find(b=>b.classList.contains('active'));
             if(tab) moveIndicator(buttons.indexOf(tab));
         });
+
+            // Initial activation of default tab
+            document.addEventListener('DOMContentLoaded', () => {
+                const defaultTab = 'about';
+                const targetPane = document.getElementById('tab-' + defaultTab);
+                if (targetPane) {
+                    targetPane.style.display = 'block';
+                    targetPane.classList.add('active');
+                }
+            });
     })();
 </script>
 </html>
