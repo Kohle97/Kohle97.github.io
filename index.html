@@ -359,62 +359,64 @@
 </script>
 <script>
     (function(){
-        // Tab switching logic with animated indicator
-        const buttons = Array.from(document.querySelectorAll('.tab-btn'));
-        const panes = document.querySelectorAll('.tab-pane');
-        const indicator = document.getElementById('tab-indicator');
+        // Make sure DOM is ready before querying elements
+        document.addEventListener('DOMContentLoaded', () => {
+            const buttons = Array.from(document.querySelectorAll('.tab-btn'));
+            const panes = Array.from(document.querySelectorAll('.tab-pane'));
+            const indicator = document.getElementById('tab-indicator');
 
             function moveIndicator(tabIdx) {
-            if (!indicator || !buttons[tabIdx]) return;
-            const btn = buttons[tabIdx];
-            const rect = btn.getBoundingClientRect();
-            const parentRect = btn.parentElement.getBoundingClientRect();
-            indicator.style.width = rect.width + 'px';
-            indicator.style.left = (rect.left - parentRect.left) + 'px';
-        }
+                if (!indicator || !buttons[tabIdx]) return;
+                const btn = buttons[tabIdx];
+                const rect = btn.getBoundingClientRect();
+                const parentRect = btn.parentElement.getBoundingClientRect();
+                indicator.style.width = rect.width + 'px';
+                indicator.style.left = (rect.left - parentRect.left) + 'px';
+            }
 
-            function activate(tab) {
-            let idx = 0;
-            buttons.forEach((b,i)=>{
-                const is = b.dataset.tab === tab;
-                b.setAttribute('aria-selected', is ? 'true' : 'false');
-                b.classList.toggle('active', is);
-                if(is) idx = i;
-            });
+            function showPane(tab) {
                 panes.forEach(p => {
                     if (p.id === 'tab-' + tab) {
                         p.style.display = 'block';
-                        setTimeout(() => p.classList.add('active'), 50);
+                        // trigger reflow then fade in
+                        void p.offsetWidth;
+                        p.classList.add('active');
                     } else {
                         p.classList.remove('active');
                         p.style.display = 'none';
                     }
                 });
-            localStorage.setItem('uebung2-active-tab', tab);
-            moveIndicator(idx);
-        }
+            }
 
-        buttons.forEach((b,i)=> b.addEventListener('click', ()=> activate(b.dataset.tab)));
+            function activate(tab) {
+                let idx = 0;
+                buttons.forEach((b,i)=>{
+                    const is = b.dataset.tab === tab;
+                    b.setAttribute('aria-selected', is ? 'true' : 'false');
+                    b.classList.toggle('active', is);
+                    if(is) idx = i;
+                });
+                showPane(tab);
+                localStorage.setItem('uebung2-active-tab', tab);
+                moveIndicator(idx);
+            }
 
-        // init: try saved tab
-        const saved = localStorage.getItem('uebung2-active-tab') || 'about';
-        activate(saved);
+            // attach listeners
+            buttons.forEach((b)=> b.addEventListener('click', (e)=> {
+                e.preventDefault();
+                activate(b.dataset.tab);
+            }));
 
-        // On resize, keep indicator in sync
-        window.addEventListener('resize', ()=>{
-            const tab = buttons.find(b=>b.classList.contains('active'));
-            if(tab) moveIndicator(buttons.indexOf(tab));
-        });
+            // init
+            const saved = localStorage.getItem('uebung2-active-tab') || 'about';
+            activate(saved);
 
-            // Initial activation of default tab
-            document.addEventListener('DOMContentLoaded', () => {
-                const defaultTab = 'about';
-                const targetPane = document.getElementById('tab-' + defaultTab);
-                if (targetPane) {
-                    targetPane.style.display = 'block';
-                    targetPane.classList.add('active');
-                }
+            // On resize, keep indicator in sync
+            window.addEventListener('resize', ()=>{
+                const tab = buttons.find(b=>b.classList.contains('active'));
+                if(tab) moveIndicator(buttons.indexOf(tab));
             });
+        });
     })();
 </script>
 </html>
