@@ -1,0 +1,25 @@
+{
+    "news": [
+        {
+            "date": "November 2025",
+            "title": "Neues GIS-Projekt gestartet",
+            "summary": "Im Rahmen des 5. Semesters arbeite ich an einem spannenden GIS-Projekt zur räumlichen Analyse von Umweltdaten in Rheinland-Pfalz.",
+            "image": "assets/images/gis-project.jpg",
+            "link": "#"
+        },
+        {
+            "date": "Oktober 2025",
+            "title": "Praktikum beim Vermessungsamt",
+            "summary": "Erfolgreicher Abschluss meines Praktikums beim Vermessungsamt, wo ich an der digitalen Kartierung historischer Gebäude mitgearbeitet habe.",
+            "image": "assets/images/vermessung.jpg",
+            "link": "#"
+        },
+        {
+            "date": "September 2025",
+            "title": "WebGIS-Entwicklung",
+            "summary": "Start meines persönlichen Projekts zur Entwicklung einer interaktiven Webkarte für lokale Vermessungspunkte.",
+            "image": "assets/images/webgis.jpg",
+            "link": "#"
+        }
+    ]
+}
