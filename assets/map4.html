@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>html, body { width:100%; height:100%; margin:0; padding:0;} .leaflet-container{height:280px; width:100%;}</style>
+</head>
+<body>
+    <div id="map4" class="leaflet-container"></div>
+<script>
+    const map4 = L.map('map4').setView([51.1657, 10.4515], 6); // Germany overview
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom:19, attribution:'© OpenStreetMap contributors'}).addTo(map4);
+</script>
+</body>
+</html>
